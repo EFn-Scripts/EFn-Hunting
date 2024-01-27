@@ -1,25 +1,25 @@
-AOD = {}
+EFn = {}
 
-AOD.HuntAnimals = {'a_c_deer', 'a_c_coyote', 'a_c_boar'}
-AOD.SpawnDistanceRadius = math.random(50,65) --disance animal spawns from bait
-AOD.HuntingZones = {'CMSW' , 'SANCHIA', 'MTGORDO', 'MTJOSE', 'PALHIGH'} --add valid zones here
-AOD.SpawnChance = 1.0 -- 10 percent chance use values .01 - 1.0
-AOD.DistanceFromBait = 25.0 -- distance from player to spawn bait
-AOD.DistanceTooCloseToAnimal = 15.0
-AOD.HuntingWeapon = `WEAPON_MUSKET` --set to nil for no requirement
-AOD.HuntAnyWhere = false
-AOD.UseBlip = true -- set to true for the animal to have a blip on the map
-AOD.BlipText = 'Prey'
+EFn.HuntAnimals = {'a_c_deer', 'a_c_coyote', 'a_c_boar'}
+EFn.SpawnDistanceRadius = math.random(50,65) --disance animal spawns from bait
+EFn.HuntingZones = {'CMSW' , 'SANCHIA', 'MTGORDO', 'MTJOSE', 'PALHIGH'} --add valid zones here
+EFn.SpawnChance = 1.0 -- 10 percent chance use values .01 - 1.0
+EFn.DistanceFromBait = 25.0 -- distance from player to spawn bait
+EFn.DistanceTooCloseToAnimal = 15.0
+EFn.HuntingWeapon = `WEAPON_MUSKET` --set to nil for no requirement
+EFn.HuntAnyWhere = false
+EFn.UseBlip = true -- set to true for the animal to have a blip on the map
+EFn.BlipText = 'Prey'
 
 --Rewards for butchering animals
-AOD.BoarMeat = math.random(5) -- amount of meat to receive from Boars
-AOD.BoarTusk = 2
-AOD.DeerSkin = 1
-AOD.DeerMeat = math.random(5)
-AOD.CoyoteFur = 1
-AOD.CoyoteMeat = math.random(5)
+EFn.BoarMeat = math.random(5) -- amount of meat to receive from Boars
+EFn.BoarTusk = 2
+EFn.DeerSkin = 1
+EFn.DeerMeat = math.random(5)
+EFn.CoyoteFur = 1
+EFn.CoyoteMeat = math.random(5)
 
-AOD.Strings = {
+EFn.Strings = {
 QBClient = 'QBCore:GetObject',
 QBServer = 'QBCore:GetObject',
 NotValidZone = 'Your bait would not take here',

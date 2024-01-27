@@ -5,8 +5,8 @@ DecorRegister('MyAnimal', 2) -- don't touch it
 
 isValidZone =  function()
     local zoneInH = GetNameOfZone(GetEntityCoords(PlayerPedId()))
-    for k, v in pairs(AOD.HuntingZones) do
-        if zoneInH == v or AOD.HuntAnyWhere == true then
+    for k, v in pairs(EFn.HuntingZones) do
+        if zoneInH == v or EFn.HuntAnyWhere == true then
             return true
         end
     end
@@ -16,11 +16,11 @@ SetSpawn = function(baitLocation)
     local playerCoords = GetEntityCoords(PlayerPedId())
     local spawnCoords = nil
     while spawnCoords == nil do
-        local spawnX = math.random(-AOD.SpawnDistanceRadius, AOD.SpawnDistanceRadius)
-        local spawnY = math.random(-AOD.SpawnDistanceRadius, AOD.SpawnDistanceRadius)
+        local spawnX = math.random(-EFn.SpawnDistanceRadius, EFn.SpawnDistanceRadius)
+        local spawnY = math.random(-EFn.SpawnDistanceRadius, EFn.SpawnDistanceRadius)
         local spawnZ = baitLocation.z
         local vec = vector3(baitLocation.x + spawnX, baitLocation.y + spawnY, spawnZ)
-        if #(playerCoords - vec) > AOD.SpawnDistanceRadius then
+        if #(playerCoords - vec) > EFn.SpawnDistanceRadius then
             spawnCoords = vec
         end
     end
@@ -33,8 +33,8 @@ baitDown = function(baitLocation)
     Citizen.CreateThread(function()
         while baitLocation ~= nil do
             local coords = GetEntityCoords(PlayerPedId())
-            if #(baitLocation - coords) > AOD.DistanceFromBait then
-                if math.random() < AOD.SpawnChance then
+            if #(baitLocation - coords) > EFn.DistanceFromBait then
+                if math.random() < EFn.SpawnChance then
                     SpawnAnimal(baitLocation)
                     baitLocation = nil
                 end
@@ -46,7 +46,7 @@ end
 
 SpawnAnimal = function(location)
     local spawn = SetSpawn(location)
-    local model = GetHashKey(AOD.HuntAnimals[math.random(1,#AOD.HuntAnimals)])
+    local model = GetHashKey(EFn.HuntAnimals[math.random(1,#EFn.HuntAnimals)])
     RequestModel(model)
     while not HasModelLoaded(model) do Citizen.Wait(10) end
     local prey = CreatePed(28, model, spawn, true, true, true)
@@ -54,14 +54,14 @@ SpawnAnimal = function(location)
     TaskGoToCoordAnyMeans(prey, location, 1.0, 0, 0, 786603, 1.0)
     table.insert(HuntedAnimalTable, {id = prey, animal = model})
     SetModelAsNoLongerNeeded(model)
-    if AOD.UseBlip then
+    if EFn.UseBlip then
         local blip = AddBlipForEntity(prey)
 		     SetBlipDisplay(blip, 2)
 		     SetBlipScale  (blip, 0.85)
 		     SetBlipColour (blip, 2)
 		     SetBlipAsShortRange(blip, false)
 		     BeginTextCommandSetBlipName("STRING")
-		     AddTextComponentString(AOD.BlipText)
+		     AddTextComponentString(EFn.BlipText)
 		     EndTextCommandSetBlipName(blip)
     		end
     Citizen.CreateThread(function()
@@ -78,7 +78,7 @@ SpawnAnimal = function(location)
                     destination = true
                 end)
             end
-            if #(preyCoords - GetEntityCoords(guy)) < AOD.DistanceTooCloseToAnimal then
+            if #(preyCoords - GetEntityCoords(guy)) < EFn.DistanceTooCloseToAnimal then
                 ClearPedTasks(prey)
                 TaskSmartFleePed(prey, guy,600.0, -1, true, true)
                 destination = true
@@ -91,28 +91,28 @@ SpawnAnimal = function(location)
     end)
 end
 
-RegisterNetEvent('AOD-huntingbait')
-AddEventHandler('AOD-huntingbait', function()
+RegisterNetEvent('EFn-huntingbait')
+AddEventHandler('EFn-huntingbait', function()
     if not isValidZone() then
-        Notify(AOD.Strings.NotValidZone)
+        Notify(EFn.Strings.NotValidZone)
         return
     end
     if busy then
-        Notify(AOD.Strings.ExploitDetected)
+        Notify(EFn.Strings.ExploitDetected)
         Citizen.Wait(2000)
-        Notify(AOD.Strings.DontSpawm)
-        TriggerServerEvent('AOD-hunt:TakeItem', 'huntingbait')
+        Notify(EFn.Strings.DontSpawm)
+        TriggerServerEvent('EFn-hunt:TakeItem', 'huntingbait')
         return
     end
     if baitexists ~= 0 and GetGameTimer() < (baitexists + 90000) then
-        Notify(AOD.Strings.WaitToBait)
+        Notify(EFn.Strings.WaitToBait)
         return
     end
     baitexists = nil
     busy = true
     local player = PlayerPedId()
     TaskStartScenarioInPlace(player, 'WORLD_HUMAN_GARDENER_PLANT', 0, true)
-    QBCore.Functions.Progressbar("placing_bait", AOD.Strings.PlacingBait, 15000, false, true, {
+    QBCore.Functions.Progressbar("placing_bait", EFn.Strings.PlacingBait, 15000, false, true, {
         disableMovement = true,
         disableCarMovement = true,
         disableMouse = false,
@@ -121,8 +121,8 @@ AddEventHandler('AOD-huntingbait', function()
         ClearPedTasks(player)
         baitexists = GetGameTimer()
         local baitLocation = GetEntityCoords(player)
-        Notify(AOD.Strings.BaitPlaced)
-        TriggerServerEvent('AOD-hunt:TakeItem', 'huntingbait')
+        Notify(EFn.Strings.BaitPlaced)
+        TriggerServerEvent('EFn-hunt:TakeItem', 'huntingbait')
         baitDown(baitLocation)
         SpawnBaitItem(baitLocation)
         busy = false
@@ -131,8 +131,8 @@ AddEventHandler('AOD-huntingbait', function()
     end)
 end)
 
-RegisterNetEvent('AOD-huntingknife')
-AddEventHandler('AOD-huntingknife', function()
+RegisterNetEvent('EFn-huntingknife')
+AddEventHandler('EFn-huntingknife', function()
     Citizen.CreateThread(function()
         Citizen.Wait(1000)
         for index, value in ipairs(HuntedAnimalTable) do
@@ -141,7 +141,7 @@ AddEventHandler('AOD-huntingknife', function()
             local PlyCoords = GetEntityCoords(person)
             local AnimalHealth = GetEntityHealth(value.id)
             local PlyToAnimal = #(PlyCoords - AnimalCoords)
-            local gun = AOD.HuntingWeapon
+            local gun = EFn.HuntingWeapon
             local d = GetPedCauseOfDeath(value.id)
             if DoesEntityExist(value.id) and AnimalHealth <= 0 and PlyToAnimal < 2.0 and (gun == d or gun == nil) and not busy then
                 busy = true
@@ -152,17 +152,17 @@ AddEventHandler('AOD-huntingknife', function()
                 ClearPedTasksImmediately(person)
                 TaskPlayAnim(person, 'amb@medic@standing@kneel@base' ,'base' ,8.0, -8.0, -1, 1, 0, false, false, false )
                 TaskPlayAnim(person, 'anim@gangops@facility@servers@bodysearch@' ,'player_search' ,8.0, -8.0, -1, 48, 0, false, false, false )
-                --exports['progressBars']:startUI((5000), AOD.Strings.Harvest)
-                QBCore.Functions.Progressbar("butchering", AOD.Strings.Harvest, 5000, false, true, {
+                --exports['progressBars']:startUI((5000), EFn.Strings.Harvest)
+                QBCore.Functions.Progressbar("butchering", EFn.Strings.Harvest, 5000, false, true, {
                     disableMovement = true,
                     disableCarMovement = true,
                     disableMouse = false,
                     disableCombat = true,
                 }, {}, {}, {}, function()
                     ClearPedTasks(person)
-                    Notify(AOD.Strings.Butchered)
+                    Notify(EFn.Strings.Butchered)
                     DeleteEntity(value.id)
-                    TriggerServerEvent('AOD-butcheranimal', value.animal)
+                    TriggerServerEvent('EFn-butcheranimal', value.animal)
                     busy = false
                     table.remove(HuntedAnimalTable, index)
                     DeleteBaitItem()
@@ -170,20 +170,20 @@ AddEventHandler('AOD-huntingknife', function()
                     QBCore.Functions.Notify("Failed!", "error")
                 end)
             elseif busy then
-                Notify(AOD.Strings.ExploitDetected)
+                Notify(EFn.Strings.ExploitDetected)
             elseif gun ~= d and AnimalHealth <= 0 and PlyToAnimal < 2.0 then
-                Notify(AOD.Strings.Roadkill)
+                Notify(EFn.Strings.Roadkill)
                 DeleteEntity(value.id)
                 table.remove(HuntedAnimalTable, index)
                 DeleteBaitItem()
             elseif PlyToAnimal > 3.0 then
-                Notify(AOD.Strings.NoAnimal)
+                Notify(EFn.Strings.NoAnimal)
             elseif AnimalHealth > 0 then
-                Notify(AOD.Strings.NotDead)
+                Notify(EFn.Strings.NotDead)
             elseif not DoesEntityExist(value.id) and PlyToAnimal < 2.0 then
-                Notify(AOD.Strings.NotYours)
+                Notify(EFn.Strings.NotYours)
             else
-                Notify(AOD.Strings.WTF)
+                Notify(EFn.Strings.WTF)
             end
         end
     end)
