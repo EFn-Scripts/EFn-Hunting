@@ -16,11 +16,17 @@ elseif EFn.Framework  == 'standalone' then
 	-- you can add your own custom framework here
 end
 
-QBCore.Functions.CreateUseableItem('huntingknife', function(source)
+if Config.Framework == 'esx' then 
+    UseableItemEvent = ESX.RegisterUsableItem
+elseif Config.Framework == 'qbcore' then 
+    UseableItemEvent  = QBCore.Functions.CreateUseableItem
+end
+
+UseableItemEvent('huntingknife', function(source)
     TriggerClientEvent('EFn-huntingknife',source)
 end)
 
-QBCore.Functions.CreateUseableItem('huntingbait', function(source)
+UseableItemEvent('huntingbait', function(source)
     TriggerClientEvent('EFn-huntingbait', source)
 end)
 
