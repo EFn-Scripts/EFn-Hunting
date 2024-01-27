@@ -1,4 +1,20 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+ESX, QBCore = nil, nil
+
+if EFn.Framework  == 'esx' then
+    pcall(function() ESX = exports[EFn.Strings.esxName]:getSharedObject() end)
+    if ESX == nil then
+        TriggerEvent(EFn.Strings.esxMain, function(obj) ESX = obj end)
+    end
+    
+elseif EFn.Framework == 'qbcore' then
+    TriggerEvent(EFn.Strings.qbMain, function(obj) QBCore = obj end)
+    if QBCore == nil then
+        QBCore = exports[EFn.Strings.qbName]:GetCoreObject()
+    end
+    
+elseif EFn.Framework  == 'standalone' then
+	-- you can add your own custom framework here
+end
 
 QBCore.Functions.CreateUseableItem('huntingknife', function(source)
     TriggerClientEvent('EFn-huntingknife',source)

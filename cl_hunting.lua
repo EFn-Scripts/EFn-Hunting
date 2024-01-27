@@ -1,4 +1,26 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+ESX, QBCore = nil, nil
+
+CreateThread(function()
+    if EFn.Framework == 'esx' then
+        while ESX == nil do
+            pcall(function() ESX = exports[EFn.Strings.esxName]:getSharedObject() end)
+            if ESX == nil then
+                TriggerEvent(EFn.Strings.esxMain, function(obj) ESX = obj end)
+            end
+            Wait(100)
+        end
+    elseif EFn.Framework == 'qbcore' then
+        while QBCore == nil do
+            TriggerEvent(EFn.Strings.qbMain, function(obj) QBCore = obj end)
+            if QBCore == nil then
+                QBCore = exports[EFn.Strings.qbName]:GetCoreObject()
+            end
+            Wait(100)
+        end
+    elseif EFn.Framework == 'standalone' then
+
+    end
+end)
 
 local baitexists, baitLocation, HuntedAnimalTable, busy = 0, nil, {}, false
 DecorRegister('MyAnimal', 2) -- don't touch it
