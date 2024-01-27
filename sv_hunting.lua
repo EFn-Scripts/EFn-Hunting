@@ -16,9 +16,9 @@ elseif EFn.Framework  == 'standalone' then
 	-- you can add your own custom framework here
 end
 
-if Config.Framework == 'esx' then 
+if EFn.Framework == 'esx' then 
     UseableItemEvent = ESX.RegisterUsableItem
-elseif Config.Framework == 'qbcore' then 
+elseif EFn.Framework == 'qbcore' then 
     UseableItemEvent  = QBCore.Functions.CreateUseableItem
 end
 
