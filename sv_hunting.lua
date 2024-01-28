@@ -53,6 +53,12 @@ end)
 
 RegisterServerEvent('EFn-hunt:TakeItem')
 AddEventHandler('EFn-hunt:TakeItem', function(item)
-    local xPlayer = QBCore.Functions.GetPlayer(source)
-    xPlayer.Functions.RemoveItem(item, 1)
+    if EFn.Framework = 'esx' then 
+        local xPlayer = ESX.GetPlayerFromId(source)
+        xPlayer.removeInventoryItem(item, 1)
+    elseif EFn.Framework == 'qbcore' then
+        local xPlayer = QBCore.Functions.GetPlayer(source)
+        xPlayer.Functions.RemoveItem(item, 1)
+    else 
+        --do nothing
 end)
