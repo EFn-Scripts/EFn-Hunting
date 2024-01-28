@@ -130,23 +130,16 @@ AddEventHandler('EFn-huntingbait', function()
     busy = true
     local player = PlayerPedId()
     TaskStartScenarioInPlace(player, 'WORLD_HUMAN_GARDENER_PLANT', 0, true)
-    QBCore.Functions.Progressbar("placing_bait", EFn.Strings.PlacingBait, 15000, false, true, {
-        disableMovement = true,
-        disableCarMovement = true,
-        disableMouse = false,
-        disableCombat = true,
-    }, {}, {}, {}, function()
-        ClearPedTasks(player)
-        baitexists = GetGameTimer()
-        local baitLocation = GetEntityCoords(player)
-        Notify(EFn.Strings.BaitPlaced)
-        TriggerServerEvent('EFn-hunt:TakeItem', 'huntingbait')
-        baitDown(baitLocation)
-        SpawnBaitItem(baitLocation)
-        busy = false
-    end, function()
-        QBCore.Functions.Notify("Failed!", "error")
-    end)
+    exports['progressBars']:startUI((15000), EFn.Strings.PlacingBait)
+    Citizen.Wait(15000)
+    ClearPedTasks(player)
+    baitexists = GetGameTimer()
+    local baitLocation = GetEntityCoords(player)
+    Notify(EFn.Strings.BaitPlaced)
+    TriggerServerEvent('EFn-hunt:TakeItem', 'huntingbait')
+    baitDown(baitLocation)
+    SpawnBaitItem(baitLocation)
+    busy = false
 end)
 
 RegisterNetEvent('EFn-huntingknife')
@@ -227,10 +220,12 @@ LoadAnimDict = function(dict)
     end
 end
 
-Notify = function(text, timer)
-    if timer == nil then
-        timer = 5000
-    end
-    QBCore.Functions.Notify(text, "error")
+Notify = function(text)
+    --SetNotificationTextEntry('STRING') -- Standalone notification
+    --AddTextComponentString(text) -- Standalone notification
+    --DrawNotification(0,1) -- Standalone notification
+    --ESX.ShowNotification(text) -- ESX Notification
+    QBCore.Functions.Notify(text, "success") -- QB Notify
+    -- add your own and hash off others.
 end
 
