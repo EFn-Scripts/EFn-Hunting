@@ -52,7 +52,7 @@ SetSpawn = function(baitLocation)
 end
 
 baitDown = function(baitLocation)
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while baitLocation ~= nil do
             local coords = GetEntityCoords(PlayerPedId())
             if #(baitLocation - coords) > EFn.DistanceFromBait then
@@ -61,7 +61,7 @@ baitDown = function(baitLocation)
                     baitLocation = nil
                 end
             end
-            Citizen.Wait(15000)
+            Wait(15000)
         end
     end)
 end
@@ -70,7 +70,7 @@ SpawnAnimal = function(location)
     local spawn = SetSpawn(location)
     local model = GetHashKey(EFn.HuntAnimals[math.random(1,#EFn.HuntAnimals)])
     RequestModel(model)
-    while not HasModelLoaded(model) do Citizen.Wait(10) end
+    while not HasModelLoaded(model) do Wait(10) end
     local prey = CreatePed(28, model, spawn, true, true, true)
     DecorSetBool(prey, 'MyAnimal', true)
     TaskGoToCoordAnyMeans(prey, location, 1.0, 0, 0, 786603, 1.0)
@@ -86,7 +86,7 @@ SpawnAnimal = function(location)
 		     AddTextComponentString(EFn.BlipText)
 		     EndTextCommandSetBlipName(blip)
     		end
-    Citizen.CreateThread(function()
+    CreateThread(function()
         local destination = false
         while not IsPedDeadOrDying(prey) and not destination do
             local preyCoords = GetEntityCoords(prey)
@@ -94,9 +94,9 @@ SpawnAnimal = function(location)
             local guy = PlayerPedId()
             if distance < 0.35 then
                 ClearPedTasks(prey)
-                Citizen.Wait(1500)
+                Wait(1500)
                 TaskStartScenarioInPlace(prey, 'WORLD_DEER_GRAZING', 0, true)
-                Citizen.SetTimeout(8000, function()
+                SetTimeout(8000, function()
                     destination = true
                 end)
             end
@@ -105,7 +105,7 @@ SpawnAnimal = function(location)
                 TaskSmartFleePed(prey, guy,600.0, -1, true, true)
                 destination = true
             end
-            Citizen.Wait(1000)
+            Wait(1000)
         end
         if not IsPedDeadOrDying(prey) then
             TaskSmartFleePed(prey, guy,600.0, -1, true, true)
@@ -121,7 +121,7 @@ AddEventHandler('EFn-huntingbait', function()
     end
     if busy then
         Notify(EFn.Strings.ExploitDetected)
-        Citizen.Wait(2000)
+        Wait(2000)
         Notify(EFn.Strings.DontSpawm)
         TriggerServerEvent('EFn-hunt:TakeItem', 'huntingbait')
         return
@@ -155,8 +155,8 @@ end)
 
 RegisterNetEvent('EFn-huntingknife')
 AddEventHandler('EFn-huntingknife', function()
-    Citizen.CreateThread(function()
-        Citizen.Wait(1000)
+    CreateThread(function()
+        Wait(1000)
         for index, value in ipairs(HuntedAnimalTable) do
             local person = PlayerPedId()
             local AnimalCoords = GetEntityCoords(value.id)
@@ -170,7 +170,7 @@ AddEventHandler('EFn-huntingknife', function()
                 LoadAnimDict('amb@medic@standing@kneel@base')
                 LoadAnimDict('anim@gangops@facility@servers@bodysearch@')
                 TaskTurnPedToFaceEntity(person, value.id, -1)
-                Citizen.Wait(1500)
+                Wait(1500)
                 ClearPedTasksImmediately(person)
                 TaskPlayAnim(person, 'amb@medic@standing@kneel@base' ,'base' ,8.0, -8.0, -1, 1, 0, false, false, false )
                 TaskPlayAnim(person, 'anim@gangops@facility@servers@bodysearch@' ,'player_search' ,8.0, -8.0, -1, 48, 0, false, false, false )
@@ -214,7 +214,7 @@ end)
 SpawnBaitItem = function(result)
     local model = `prop_drug_package_02`
     RequestModel(model)
-    while not HasModelLoaded(model) do Citizen.Wait(10) end
+    while not HasModelLoaded(model) do Wait(10) end
     local bait = CreateObject(model, result.x , result.y , result.z- 1.0, true, true, true)
     SetModelAsNoLongerNeeded(model)
     FreezeEntityPosition(bait, true)
@@ -236,7 +236,7 @@ DeleteBaitItem = function()
 LoadAnimDict = function(dict)
     while (not HasAnimDictLoaded(dict)) do
         RequestAnimDict(dict)
-        Citizen.Wait(10)
+        Wait(10)
     end
 end
 
