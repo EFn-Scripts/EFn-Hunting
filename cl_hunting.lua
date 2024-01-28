@@ -174,23 +174,14 @@ AddEventHandler('EFn-huntingknife', function()
                 ClearPedTasksImmediately(person)
                 TaskPlayAnim(person, 'amb@medic@standing@kneel@base' ,'base' ,8.0, -8.0, -1, 1, 0, false, false, false )
                 TaskPlayAnim(person, 'anim@gangops@facility@servers@bodysearch@' ,'player_search' ,8.0, -8.0, -1, 48, 0, false, false, false )
-                --exports['progressBars']:startUI((5000), EFn.Strings.Harvest)
-                QBCore.Functions.Progressbar("butchering", EFn.Strings.Harvest, 5000, false, true, {
-                    disableMovement = true,
-                    disableCarMovement = true,
-                    disableMouse = false,
-                    disableCombat = true,
-                }, {}, {}, {}, function()
-                    ClearPedTasks(person)
-                    Notify(EFn.Strings.Butchered)
-                    DeleteEntity(value.id)
-                    TriggerServerEvent('EFn-butcheranimal', value.animal)
-                    busy = false
-                    table.remove(HuntedAnimalTable, index)
-                    DeleteBaitItem()
-                end, function()
-                    QBCore.Functions.Notify("Failed!", "error")
-                end)
+                exports['progressBars']:startUI((5000), EFn.Strings.Harvest)
+                ClearPedTasks(person)
+                Notify(EFn.Strings.Butchered)
+                DeleteEntity(value.id)
+                TriggerServerEvent('EFn-butcheranimal', value.animal)
+                busy = false
+                table.remove(HuntedAnimalTable, index)
+                DeleteBaitItem()
             elseif busy then
                 Notify(EFn.Strings.ExploitDetected)
             elseif gun ~= d and AnimalHealth <= 0 and PlyToAnimal < 2.0 then
