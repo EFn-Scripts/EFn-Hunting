@@ -1,4 +1,4 @@
-ESX, QBCore = nil, nil
+local ESX, QBCore, baitexists, baitLocation, HuntedAnimalTable, busy = nil, nil, 0, nil, {}, false
 
 CreateThread(function()
     if EFn.Framework == 'esx' then
@@ -21,9 +21,6 @@ CreateThread(function()
 
     end
 end)
-
-local baitexists, baitLocation, HuntedAnimalTable, busy = 0, nil, {}, false
-DecorRegister('MyAnimal', 2) -- don't touch it
 
 isValidZone =  function()
     local zoneInH = GetNameOfZone(GetEntityCoords(PlayerPedId()))
@@ -72,7 +69,6 @@ SpawnAnimal = function(location)
     RequestModel(model)
     while not HasModelLoaded(model) do Wait(10) end
     local prey = CreatePed(28, model, spawn, true, true, true)
-    DecorSetBool(prey, 'MyAnimal', true)
     TaskGoToCoordAnyMeans(prey, location, 1.0, 0, 0, 786603, 1.0)
     table.insert(HuntedAnimalTable, {id = prey, animal = model})
     SetModelAsNoLongerNeeded(model)
