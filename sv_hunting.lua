@@ -18,8 +18,12 @@ end
 
 if EFn.Framework == 'esx' then 
     UseableItemEvent = ESX.RegisterUsableItem
+    GetUserData = ESX.GetPlayerFromId
+    addItem = addInventoryItem
 elseif EFn.Framework == 'qbcore' then 
     UseableItemEvent  = QBCore.Functions.CreateUseableItem
+    GetUserData = QBCore.Functions.GetPlayer
+    addItem = Functions.AddItem
 end
 
 UseableItemEvent('huntingknife', function(source)
@@ -32,19 +36,19 @@ end)
 
 RegisterServerEvent('EFn-butcheranimal')
 AddEventHandler('EFn-butcheranimal', function(animal)
-    local xPlayer = QBCore.Functions.GetPlayer(source)
+    local xPlayer = GetUserData(source)
     local boar = -832573324
     local deer = -664053099
     local coyote = 1682622302
     if animal == boar then
-        xPlayer.Functions.AddItem('boarmeat', EFn.BoarMeat)
-        xPlayer.Functions.AddItem('boartusk', EFn.BoarTusk)
+        xPlayer.addItem('boarmeat', EFn.BoarMeat)
+        xPlayer.addItem('boartusk', EFn.BoarTusk)
     elseif animal == deer then
-        xPlayer.Functions.AddItem('deerskin', EFn.DeerSkin)
-        xPlayer.Functions.AddItem('deermeat', EFn.DeerMeat)
+        xPlayer.addItem('deerskin', EFn.DeerSkin)
+        xPlayer.addItem('deermeat', EFn.DeerMeat)
     elseif animal == coyote then
-        xPlayer.Functions.AddItem('coyotefur', EFn.CoyoteFur)
-        xPlayer.Functions.AddItem('coyotemeat', EFn.CoyoteMeat)
+        xPlayer.addItem('coyotefur', EFn.CoyoteFur)
+        xPlayer.addItem('coyotemeat', EFn.CoyoteMeat)
     else
         print('exploit detected')
         --add your ban event here for cheating
